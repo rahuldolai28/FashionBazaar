@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthLayout from "./components/auth/layout";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -17,14 +17,22 @@ import ShoppingCheckout from "./pages/shopping-view/checkout";
 import ShoppingAccount from "./pages/shopping-view/account";
 import CheckAuth from "./components/common/check-auth";
 import UnauthPage from "./pages/unauth-page";
+import { useSelector, useDispatch } from "react-redux";
+import { checkAuth } from "./store/auth-slice";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function App() {
-    const isAuthenticated = false;
-    // const user = {
-    //     role: "admin", // or "admin"
-    //     name: "John Doe",
-    // };
-    const user = null;
+    const { user, isAuthenticated, isLoading } = useSelector(
+        (state) => state.auth
+    );
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(checkAuth());
+    }, [dispatch]);
+
+    if (isLoading)
+        return <Skeleton className="h-[200px] w-full bg-black " />;
 
     return (
         <div className="flex flex-col overflow-hidden bg-white text-black">
@@ -38,6 +46,7 @@ function App() {
                     path="/auth"
                     element={
                         <CheckAuth
+                            isLoading={isLoading}
                             isAuthenticated={isAuthenticated}
                             user={user}>
                             <AuthLayout />
@@ -51,6 +60,7 @@ function App() {
                     path="/admin"
                     element={
                         <CheckAuth
+                            isLoading={isLoading}
                             isAuthenticated={isAuthenticated}
                             user={user}>
                             <AdminLayout />
@@ -67,6 +77,7 @@ function App() {
                     path="shop"
                     element={
                         <CheckAuth
+                            isLoading={isLoading}
                             isAuthenticated={isAuthenticated}
                             user={user}>
                             <ShoppingLayout />
@@ -77,8 +88,8 @@ function App() {
                     <Route path="listing" element={<ShoppingListing />} />
                     <Route path="account" element={<ShoppingAccount />} />
                     <Route path="*" element={<NotFound />} />
-                </Route> 
-                <Route path="/unauth-page" element={<UnauthPage/>} />
+                </Route>
+                <Route path="/unauth-page" element={<UnauthPage />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </div>

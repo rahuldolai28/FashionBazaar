@@ -1,0 +1,28 @@
+const express = require("express");
+const app = express();
+const cors = require("cors");
+const {
+    registerUser,
+    loginUser,
+    logoutUser,
+    authMiddleware
+} = require("../../controllers/auth/auth-controller");
+
+const router = express.Router();
+
+
+
+
+
+router.post("/register", registerUser);
+router.post("/login", loginUser);
+router.post("/logout", logoutUser);
+router.get("/check-auth", authMiddleware, (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: "User is authenticated",
+        user: req.user // User info attached by authMiddleware
+    });
+}); 
+
+module.exports = router;

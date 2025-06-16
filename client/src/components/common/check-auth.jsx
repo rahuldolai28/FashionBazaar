@@ -52,11 +52,18 @@
 import { useLocation, Navigate } from "react-router-dom";
 import React from "react";
 
-function CheckAuth({ isAuthenticated, user, children }) {
+function CheckAuth({ isAuthenticated, isLoading, user, children }) {
     const location = useLocation();
-    const isAuthPage = location.pathname.includes("/login") || location.pathname.includes("/register");
+    const isAuthPage =
+        location.pathname.includes("/login") ||
+        location.pathname.includes("/register");
     const isAdminPage = location.pathname.includes("/admin");
     const isShopPage = location.pathname.includes("/shop");
+
+    if (isLoading) {
+        return null; // prevent premature redirects
+    }
+    console.log(children);
 
     // Not authenticated and trying to access protected page
     if (!isAuthenticated && !isAuthPage) {
@@ -65,9 +72,11 @@ function CheckAuth({ isAuthenticated, user, children }) {
 
     // Authenticated and trying to access login/register
     if (isAuthenticated && isAuthPage) {
-        return user?.role === "admin"
-            ? <Navigate to="/admin/dashboard" replace />
-            : <Navigate to="/shop/home" replace />;
+        return user?.role === "admin" ? (
+            <Navigate to="/admin/dashboard" replace />
+        ) : (
+            <Navigate to="/shop/home" replace />
+        );
     }
 
     // Authenticated non-admin trying to access admin pages
