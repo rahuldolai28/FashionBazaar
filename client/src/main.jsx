@@ -10,7 +10,7 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
         <Provider store={store}>
             <App />
-            <Toaster richColors />
+            <Toaster richColors closeButton />
         </Provider>
     </BrowserRouter>
 );

@@ -90,13 +90,16 @@ const loginUser = async (req, res) => {
             message: "Internal server error",
         });
     }
-    res.status(200).json({ message: "User logged in successfully" });
 };
 
 //logout
 const logoutUser = (req, res) => {
     // Handle user logout logic here
-    res.clearCookie("token").status(200).json({
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: false, // Set to true in production
+        sameSite: "Strict",
+    }).status(200).json({
         success: true,
         message: "User logged out successfully",
     });
@@ -117,7 +120,14 @@ const authMiddleware = (req, res, next) => {
         next(); // Proceed to the next middleware or route handler
     } catch (error) {
         console.error("Authentication error:", error);
-        return res.status(401).json({
+         if (error.name === "TokenExpiredError") {
+            return res.status(401).json({
+                success: false,
+                message: "Token expired",
+                expiredAt: error.expiredAt, // optional for debugging
+            });
+        }
+        return res.status(403).json({
             success: false,
             message: "Invalid token",
         });

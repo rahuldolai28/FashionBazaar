@@ -1,9 +1,18 @@
 import React from "react";
 import { Input } from "../ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@radix-ui/react-select";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+} from "@/components/ui/select";
+
+const commonStyle =
+    "appearance-none border border-gray-300 text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-black focus:border-black p-2 rounded w-full";
 
 function CommonForm({
     formControls,
@@ -11,6 +20,7 @@ function CommonForm({
     setFormData,
     onSubmit,
     buttonText,
+    isBtnDisabled,
 }) {
     function renderInputsByComponentType(getControlItem) {
         let element = null;
@@ -26,7 +36,7 @@ function CommonForm({
                         id={getControlItem.name}
                         placeholder={getControlItem.placeholder}
                         required={getControlItem.required}
-                        className="border rounded p-2"
+                        className={commonStyle}
                         value={value}
                         onChange={(e) =>
                             setFormData((prevData) => ({
@@ -51,6 +61,7 @@ function CommonForm({
                         id={getControlItem.id}
                         placeholder={getControlItem.placeholder}
                         value={value}
+                        className={commonStyle}
                         onChange={(e) =>
                             setFormData((prevData) => ({
                                 ...prevData,
@@ -64,11 +75,15 @@ function CommonForm({
 
             case "select":
                 element = (
-                    <Select onValueChange={(value)=> setFormData({
-                        ...formData,
-                        [getControlItem.name]: value,
-                    })} value={value}  >
-                        <SelectTrigger className="w-full">
+                    <Select
+                        onValueChange={(value) =>
+                            setFormData({
+                                ...formData,
+                                [getControlItem.name]: value,
+                            })
+                        }
+                        value={value}>
+                        <SelectTrigger className="border border-gray-300 text-black p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-black focus:border-black">
                             <SelectValue
                                 placeholder={getControlItem.placeholder}
                             />
@@ -102,7 +117,8 @@ function CommonForm({
                         id={getControlItem.name}
                         placeholder={getControlItem.placeholder}
                         required={getControlItem.required}
-                        className="border rounded p-2"
+                        // className=" border rounded p-2"
+                        className={commonStyle}
                         value={value}
                         onChange={(e) =>
                             setFormData((prevData) => ({
@@ -118,22 +134,30 @@ function CommonForm({
     }
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className="px-5">
             <div className="flex flex-col gap-3">
                 {formControls.map((controlItem) => (
-                    <div className="grid w-full gap-1.5" key={controlItem.name}>
-                        <Label className="mb-1">{controlItem.label}</Label>
+                    <div
+                        className="grid w-full gap-1.5 mb-1"
+                        key={controlItem.name}>
+                        <Label className="  text-base ">
+                            {controlItem.label}
+                        </Label>
                         {renderInputsByComponentType(controlItem)}
                     </div>
                 ))}
             </div>
+
             <Button
                 type="submit"
-                className="mt-2 w-full       px-4 py-2  text-white rounded  ">
+                className={` mt-4   w-full  px-5 py-2  text-white rounded  ${
+                    isBtnDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                } `}
+                disabled={isBtnDisabled}>
                 {buttonText || "Submit"}
             </Button>
         </form>
-    ); 
+    );
 }
 
 export default CommonForm;

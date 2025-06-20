@@ -63,7 +63,6 @@ function CheckAuth({ isAuthenticated, isLoading, user, children }) {
     if (isLoading) {
         return null; // prevent premature redirects
     }
-    console.log(children);
 
     // Not authenticated and trying to access protected page
     if (!isAuthenticated && !isAuthPage) {

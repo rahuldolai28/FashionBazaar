@@ -1,8 +1,4 @@
-import {
-    asyncThunkCreator,
-    createAsyncThunk,
-    createSlice,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
@@ -53,6 +49,30 @@ export const loginUser = createAsyncThunk(
                 error.response?.data || {
                     success: false,
                     message: "Registration failed",
+                }
+            );
+        }
+    }
+);
+
+export const logoutUser = createAsyncThunk(
+    "auth/logout",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:5000/api/auth/logout",
+                {},
+                {
+                    withCredentials: true,
+                }
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error during Logout:", error);
+            return rejectWithValue(
+                error.response?.data || {
+                    success: false,
+                    message: "Logout failed",
                 }
             );
         }
@@ -119,6 +139,19 @@ const authSlice = createSlice({
                 state.user = action.payload.user;
             })
             .addCase(checkAuth.rejected, (state) => {
+                state.isLoading = false;
+                state.isAuthenticated = false;
+                state.user = null;
+            })
+            .addCase(logoutUser.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(logoutUser.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isAuthenticated = false;
+                state.user = null;
+            })
+            .addCase(logoutUser.rejected, (state) => {
                 state.isLoading = false;
                 state.isAuthenticated = false;
                 state.user = null;

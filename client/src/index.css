@@ -118,3 +118,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+input:focus, textarea:focus, select:focus {
+  border-color: black !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.872);
+}
