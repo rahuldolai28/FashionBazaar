@@ -61,28 +61,35 @@ const loginUser = async (req, res) => {
         }
         // Generate JWT token
         const token = jwt.sign(
-            { id: checkUser._id, role: checkUser.role, email: checkUser.email },
+            {
+                id: checkUser._id,
+                role: checkUser.role,
+                email: checkUser.email,
+                username: checkUser.username,
+            },
             // process.env.JWT_SECRET,
-            "your-secret-key", 
+            "your-secret-key",
             { expiresIn: "1h" }
         );
         // Set token in cookies
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false, 
+            secure: false,
             // secure: process.env.NODE_ENV === "production", // Set to true in production
             sameSite: "Strict",
-        }).status(200).json({
-            success: true,
-            message: "User logged in successfully",
-            user: {
-                id: checkUser._id,
-                username: checkUser.username,
-                email: checkUser.email,
-                role: checkUser.role,
-            },
-            token: token
-        });
+        })
+            .status(200)
+            .json({
+                success: true,
+                message: "User logged in successfully",
+                user: {
+                    id: checkUser._id,
+                    username: checkUser.username,
+                    email: checkUser.email,
+                    role: checkUser.role,
+                },
+                token: token,
+            });
     } catch (error) {
         console.error("Error during login:", error);
         return res.status(500).json({
@@ -99,11 +106,13 @@ const logoutUser = (req, res) => {
         httpOnly: true,
         secure: false, // Set to true in production
         sameSite: "Strict",
-    }).status(200).json({
-        success: true,
-        message: "User logged out successfully",
-    });
-}
+    })
+        .status(200)
+        .json({
+            success: true,
+            message: "User logged out successfully",
+        });
+};
 
 //auth-middleware
 const authMiddleware = (req, res, next) => {
@@ -115,12 +124,12 @@ const authMiddleware = (req, res, next) => {
         });
     }
     try {
-        const decoded = jwt.verify(token, "your-secret-key"); 
+        const decoded = jwt.verify(token, "your-secret-key");
         req.user = decoded; // Attach user info to request object
         next(); // Proceed to the next middleware or route handler
     } catch (error) {
         console.error("Authentication error:", error);
-         if (error.name === "TokenExpiredError") {
+        if (error.name === "TokenExpiredError") {
             return res.status(401).json({
                 success: false,
                 message: "Token expired",
@@ -132,12 +141,11 @@ const authMiddleware = (req, res, next) => {
             message: "Invalid token",
         });
     }
-}
-
+};
 
 module.exports = {
     registerUser,
     loginUser,
     logoutUser,
-    authMiddleware, 
+    authMiddleware,
 };
