@@ -33,11 +33,11 @@ function AdminProductTile({
                             className={`text-lg font-semibold text-primary ${
                                 product?.salePrice > 0 ? "line-through" : ""
                             }`}>
-                            ${product?.price}
+                             ₹{product?.price.toLocaleString()}
                         </span>
                         {product?.salePrice > 0 ? (
                             <span className="text-lg font-bold">
-                                ${product?.salePrice}
+                                 ₹{product?.salePrice.toLocaleString()}
                             </span>
                         ) : null}
                     </div>

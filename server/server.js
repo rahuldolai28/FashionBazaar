@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const PORT = process.env.PORT || 5000;
 const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
+const shopProductsRouter = require("./routes/shop/products-routes");
 
 
 mongoose
@@ -36,6 +37,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
+app.use("/api/shop/products", shopProductsRouter); 
 
 
 //api/auth/register - authRouter
