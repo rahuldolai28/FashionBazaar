@@ -75,9 +75,9 @@ const loginUser = async (req, res) => {
         // Set token in cookies
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
+            secure: false,
             // secure: process.env.NODE_ENV === "production", // Set to true in production
-            sameSite: "Strict",
+            sameSite: "Lax",
         })
             .status(200)
             .json({
@@ -106,7 +106,7 @@ const logoutUser = (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
         secure: false, // Set to true in production
-        sameSite: "Strict",
+        sameSite: "Lax",
     })
         .status(200)
         .json({
