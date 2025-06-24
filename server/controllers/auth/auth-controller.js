@@ -106,7 +106,7 @@ const logoutUser = (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
         secure: false, // Set to true in production
-        sameSite: "Lax",
+        sameSite: "None",
     })
         .status(200)
         .json({
