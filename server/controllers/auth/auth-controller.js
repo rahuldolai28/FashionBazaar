@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
+require("dotenv").config();
 
 //register
 const registerUser = async (req, res) => {
@@ -67,14 +68,14 @@ const loginUser = async (req, res) => {
                 email: checkUser.email,
                 username: checkUser.username,
             },
-            // process.env.JWT_SECRET,
-            "your-secret-key",
+            process.env.JWT_SECRET,
+            // "your-secret-key",
             { expiresIn: "1h" }
         );
         // Set token in cookies
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
+            secure: process.env.NODE_ENV === "production",
             // secure: process.env.NODE_ENV === "production", // Set to true in production
             sameSite: "Strict",
         })
@@ -124,7 +125,7 @@ const authMiddleware = (req, res, next) => {
         });
     }
     try {
-        const decoded = jwt.verify(token, "your-secret-key");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded; // Attach user info to request object
         next(); // Proceed to the next middleware or route handler
     } catch (error) {

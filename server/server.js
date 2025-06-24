@@ -8,12 +8,10 @@ const PORT = process.env.PORT || 5000;
 const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
 const shopProductsRouter = require("./routes/shop/products-routes");
-
+require("dotenv").config();
 
 mongoose
-    .connect(
-        "mongodb+srv://johnclaude2024:l5talMdW5otzNzet@cluster0.1f7efjd.mongodb.net/ecommerce"
-    )
+    .connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB connected"))
     .catch((err) => console.log(err));
 
@@ -37,8 +35,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
-app.use("/api/shop/products", shopProductsRouter); 
-
+app.use("/api/shop/products", shopProductsRouter);
 
 //api/auth/register - authRouter
 //api/auth/login - loginRouter
