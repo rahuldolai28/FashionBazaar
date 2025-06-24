@@ -31,8 +31,7 @@ function App() {
         dispatch(checkAuth());
     }, [dispatch]);
 
-    if (isLoading)
-        return <Skeleton className="h-[200px] w-full bg-black " />;
+    if (isLoading) return <Skeleton className="h-[200px] w-full bg-black " />;
 
     return (
         <div className="flex flex-col overflow-hidden bg-white text-black">
@@ -83,7 +82,7 @@ function App() {
                             <ShoppingLayout />
                         </CheckAuth>
                     }>
-                    <Route path="home" element={<ShoppingHome />} />
+                    <Route path="home" element={<ShoppingListing />} />
                     <Route path="checkout" element={<ShoppingCheckout />} />
                     <Route path="listing" element={<ShoppingListing />} />
                     <Route path="account" element={<ShoppingAccount />} />
