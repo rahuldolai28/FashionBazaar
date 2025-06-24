@@ -77,14 +77,14 @@ export const addProductFormElements = [
         name: "brand",
         componentType: "select",
         options: [
-            { id: "nike", label: "Nike" },
-            { id: "adidas", label: "Adidas" },
-            { id: "puma", label: "Puma" },
             { id: "levis", label: "Levi's" },
             { id: "zara", label: "Zara" },
             { id: "h&m", label: "H&M" },
             { id: "Tokyo Talkies", label: "Tokyo Talkies" },
-            { id: "others", label: "Others" },
+            { id: "special", label: "Special" },
+            { id: "nike", label: "Nike" },
+            { id: "adidas", label: "Adidas" },
+            { id: "puma", label: "Puma" },
         ],
     },
     {
@@ -114,7 +114,7 @@ export const shoppingViewHeaderMenuItems = [
     {
         id: "Home",
         label: "Home",
-        path: "/shop/home",
+        path: "/shop/listing",
     },
     {
         id: "men",
@@ -157,14 +157,14 @@ export const filterOptions = {
         { id: "footwear", label: "Footwear" },
     ],
     Brand: [
-        { id: "nike", label: "Nike" },
-        { id: "adidas", label: "Adidas" },
-        { id: "puma", label: "Puma" },
         { id: "levis", label: "Levi's" },
         { id: "Tokyo Talkies", label: "Tokyo Talkies" },
         { id: "zara", label: "Zara" },
-        { id: "hm", label: "H&M" },
-        { id: "others", label: "Others" },
+        { id: "h&m", label: "H&M" },
+        { id: "special", label: "Special" },
+        { id: "nike", label: "Nike" },
+        { id: "adidas", label: "Adidas" },
+        { id: "puma", label: "Puma" },
     ],
 };
 

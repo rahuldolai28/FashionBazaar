@@ -1,5 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import api from "@/lib//api";
+
 
 const initialState = {
     isLoading: null,
@@ -8,10 +10,15 @@ const initialState = {
 
 export const fetchAllFilteredProducts = createAsyncThunk(
     "/products/fetchAllProducts",
-    async (_, { rejectWithValue }) => {
+    async ({ filterParams, sortParams }, { rejectWithValue }) => {
         try {
-            const result = await axios.get(
-                "http://localhost:5000/api/shop/products/get"
+            const query = new URLSearchParams({
+                ...filterParams,
+                sortBy: sortParams,
+            });
+
+            const result = await api.get(
+                `/shop/products/get?${query}`
             );
             return result?.data;
         } catch (error) {
@@ -39,6 +46,5 @@ const shoppingProductsSlice = createSlice({
             });
     },
 });
-
 
 export default shoppingProductsSlice.reducer;

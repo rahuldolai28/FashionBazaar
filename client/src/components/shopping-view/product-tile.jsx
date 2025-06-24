@@ -55,4 +55,4 @@ function ShoppingProductTile({ product }) {
     );
 }
 
-export default ShoppingProductTile;
+export default  React.memo(ShoppingProductTile);

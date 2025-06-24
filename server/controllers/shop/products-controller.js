@@ -6,8 +6,52 @@ function shuffleArray(arr) {
 
 const getFilteredProducts = async (req, res) => {
     try {
-        const productsList = await Product.find({});
-        const products = shuffleArray(productsList); // Shuffle order
+        const {
+            category = "",
+            brand = "",
+            sortBy = "price-lowtohigh",
+        } = req.query;
+
+        let filters = {};
+
+        if (category.length) {
+            filters.category = { $in: category.split(",") };
+        }
+        if (brand.length) {
+            filters.brand = { $in: brand.split(",") };
+        }
+        let sort = {};
+
+        switch (sortBy) {
+            case "price-lowtohigh":
+                sort.price = 1;
+                break;
+            case "price-hightolow":
+                sort.price = -1;
+                break;
+            case "title-atoz":
+                sort.title = 1;
+                break;
+            case "title-ztoa":
+                sort.title = -1;
+                break;
+            default:
+                sort.price = 1;
+                break;
+        }
+
+        const productsList = await Product.find(filters).sort(sort);
+        let products;
+
+        // Shuffle only if no filters and default sortBy is used
+        if (
+            Object.keys(filters).length === 0 &&
+            sortBy === "price-lowtohigh"
+        ) {
+            products = shuffleArray(productsList);
+        } else {
+            products = productsList;
+        }
 
         res.status(200).json({
             success: true,
