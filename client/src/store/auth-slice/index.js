@@ -93,7 +93,7 @@ export const checkAuth = createAsyncThunk("auth/checkauth", async () => {
             },
         }
     );
-    return response.data;
+    return response.data.user;
 });
 
 const authSlice = createSlice({
