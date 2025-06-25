@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 require("dotenv").config();
+const express = require("express");
+const app = express();
 const cookieParser = require("cookie-parser");
 app.use(cookieParser()); // ✅ So req.cookies.token works
 
