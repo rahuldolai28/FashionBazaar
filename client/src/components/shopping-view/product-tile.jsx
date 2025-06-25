@@ -13,6 +13,7 @@ function ShoppingProductTile({ product }) {
                             ? product.image
                             : "https://www.insidestoreldn.com/cdn/shop/files/Loop-Wardrobe-HAYLoop-Stand-Wardrobe-Red-2---HAY_1024x1024.png?v=1707997470"
                     }
+                    loading="lazy"
                     alt={product?.title}
                     className="w-full h-[350px] object-cover rounded-t-sm"
                 />
