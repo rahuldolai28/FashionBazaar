@@ -17,7 +17,7 @@ mongoose
 
 const allowedOrigins = [
     "http://localhost:5173", // local dev
-    "https://fashion-bazaar-site.vercel.app", // deployed Vercel frontend
+    "https://fashionbazaar-client.vercel.app/", // deployed Vercel frontend
 ];
 
 app.use(
