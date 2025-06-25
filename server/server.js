@@ -20,7 +20,7 @@ app.use(
         origin: [
             "http://localhost:5173",
             "https://fashionbazaar-client.vercel.app",
-            "https://fashionbazaar-client.vercel.app",
+            "https://fashion-bazaar.vercel.app/",
         ],
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: [
