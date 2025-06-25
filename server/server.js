@@ -15,9 +15,14 @@ mongoose
     .then(() => console.log("MongoDB connected"))
     .catch((err) => console.log(err));
 
+const allowedOrigins = [
+    "http://localhost:3000", // local dev
+    "https://fashion-bazaar.vercel.app/", // deployed Vercel frontend
+];
+
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: allowedOrigins,
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: [
             "Content-Type",
