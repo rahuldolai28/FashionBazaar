@@ -2,6 +2,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
+app.use(cookieParser()); // ✅ So req.cookies.token works
+
 
 //register
 const registerUser = async (req, res) => {
@@ -75,9 +78,9 @@ const loginUser = async (req, res) => {
         // Set token in cookies
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             // secure: process.env.NODE_ENV === "production", // Set to true in production
-            sameSite: "Lax",
+            sameSite: "None",
         })
             .status(200)
             .json({
@@ -105,7 +108,7 @@ const logoutUser = (req, res) => {
     // Handle user logout logic here
     res.clearCookie("token", {
         httpOnly: true,
-        secure: false, // Set to true in production
+        secure: true, // Set to true in production
         sameSite: "None",
     })
         .status(200)
