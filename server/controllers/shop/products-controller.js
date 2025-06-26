@@ -44,10 +44,7 @@ const getFilteredProducts = async (req, res) => {
         let products;
 
         // Shuffle only if no filters and default sortBy is used
-        if (
-            Object.keys(filters).length === 0 &&
-            sortBy === "price-lowtohigh"
-        ) {
+        if (Object.keys(filters).length === 0 && sortBy === "price-lowtohigh") {
             products = shuffleArray(productsList);
         } else {
             products = productsList;
@@ -66,4 +63,28 @@ const getFilteredProducts = async (req, res) => {
     }
 };
 
-module.exports = { getFilteredProducts };
+const getProductsDetails = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found",
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: product,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message:
+                "Error get product details in shopping product controller ",
+        });
+    }
+};
+
+module.exports = { getFilteredProducts, getProductsDetails };

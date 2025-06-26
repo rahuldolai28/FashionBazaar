@@ -21,6 +21,7 @@ function AdminProductTile({
                             "https://res.cloudinary.com/dpsub2vjz/image/upload/v1750413621/lzzl7swtk8f8jgxxkj7z.jpg"
                         }
                         alt={product?.title}
+                        loading="lazy"
                         className="w-full h-[300px] object-cover rounded-t-lg"
                     />
                 </div>

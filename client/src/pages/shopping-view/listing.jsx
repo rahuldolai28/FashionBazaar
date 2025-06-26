@@ -14,9 +14,13 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpDownIcon } from "lucide-react";
 import { sortOptions } from "@/config";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
-import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
+import {
+    fetchAllFilteredProducts,
+    fetchProductDetails,
+} from "@/store/shop/products-slice";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { createSearchParams, useSearchParams } from "react-router-dom";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
 
 function createSearchParamsHelper(filterParams) {
     const queryParams = [];
@@ -32,27 +36,25 @@ function createSearchParamsHelper(filterParams) {
 
 function ShoppingListing() {
     const dispatch = useDispatch();
-    const { products } = useSelector(
+    const { products, productsDetails } = useSelector(
         (state) => state.shoppingProducts,
         shallowEqual
     );
     const [filters, setFilters] = useState({});
     const [sort, setSort] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
     function handleSort(value) {
         setSort(value);
     }
 
     function handleFilter(getSectionId, getCurrentOption) {
-        console.log(getSectionId, getCurrentOption);
-
         let copyFilters = { ...filters }; // safe shallow copy
         console.log("copy", copyFilters);
 
         const indexOfCurrentSection =
             Object.keys(copyFilters).indexOf(getSectionId);
-        console.log(indexOfCurrentSection);
         if (indexOfCurrentSection === -1) {
             copyFilters = {
                 ...copyFilters,
@@ -65,10 +67,13 @@ function ShoppingListing() {
                 copyFilters[getSectionId].push(getCurrentOption);
             } else copyFilters[getSectionId].splice(indexOfCurrentOption, 1);
         }
-        console.log(getSectionId, getCurrentOption);
         setFilters(copyFilters);
         sessionStorage.setItem("filters", JSON.stringify(copyFilters));
-        console.log(copyFilters);
+    }
+
+    function handleGetProductDetails(getCurrentProductId) {
+        console.log(getCurrentProductId);
+        dispatch(fetchProductDetails({ id: getCurrentProductId }));
     }
 
     useEffect(() => {
@@ -100,7 +105,11 @@ function ShoppingListing() {
         }
     }, [dispatch, sort, filters]);
 
-    console.log(searchParams);
+    useEffect(() => {
+        if (productsDetails !== null) setOpenDetailsDialog(true);
+    }, [productsDetails]);
+
+    console.log(productsDetails, "productsDetails");
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-1 md:p-6">
@@ -146,11 +155,17 @@ function ShoppingListing() {
                               <ShoppingProductTile
                                   key={productItem._id}
                                   product={productItem}
+                                  handleGetProductDetails={
+                                      handleGetProductDetails
+                                  }
                               />
                           ))
                         : "No Products Available "}
                 </div>
             </div>
+            <ProductDetailsDialog open={openDetailsDialog}
+            setOpen={setOpenDetailsDialog}
+            productsDetails={productsDetails} />
         </div>
     );
 }
