@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
     HousePlug,
@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
+import UserCartWrapper from "@/components/shopping-view/cart-wrapper";
+import { fetchCartItems } from "@/store/shop/cart-slice";
 
 function MenuItems() {
     return (
@@ -37,7 +39,7 @@ function MenuItems() {
                 <Link
                     key={menuItem.id}
                     to={menuItem.path}
-                    className="text-sm font-medium">
+                    className="text-base font-medium">
                     {menuItem.label}
                 </Link>
             ))}
@@ -47,28 +49,57 @@ function MenuItems() {
 
 function HeaderRightContent() {
     const { user } = useSelector((state) => state.auth);
+    const { cartItems } = useSelector((state) => state.shoppingCart);
+    const [openCartSheet, setOpenCartSheet] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     function handleLogout() {
         dispatch(logoutUser());
     }
+
+    useEffect(() => {
+        dispatch(fetchCartItems(user?.id));
+    }, [dispatch]);
+
     return (
         <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-            <div className="flex items-center lg:flex-row  gap-2 align-center  ">
-                <Button className="" variant="outline" size="icon">
-                    <ShoppingCart className="w-6 h-6  " />
-                    <span className="sr-only"> User Cart</span>
+            <Sheet
+                open={openCartSheet}
+                onOpenChange={() => setOpenCartSheet(false)}>
+                <Button
+                    onClick={() => setOpenCartSheet(true)}
+                    variant="ghost"
+                    className="self-start justify-start !px-0 "
+                    aria-label="Open cart">
+                    {/* icon */}
+                    <ShoppingCart className="!h-7 !w-7" />
+
+                    {/* text visible only below lg */}
+                    <span className="text-lg lg:hidden">Cart</span>
                 </Button>
-                <span className="lg:hidden text-lg ">Cart</span>
-            </div>
+                <UserCartWrapper
+                    cartItems={
+                        cartItems &&
+                        cartItems.items &&
+                        cartItems.items.length > 0
+                            ? cartItems.items
+                            : []
+                    }
+                />
+            </Sheet>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Avatar className="bg-black">
-                        <AvatarFallback className="bg-black text-white font-extrabold ">
-                            {user?.username[0].toUpperCase()}
-                        </AvatarFallback>
-                    </Avatar>
+                    <div className="flex items-center gap-2 cursor-pointer">
+                        <Avatar className="bg-black">
+                            <AvatarFallback className="bg-black text-white font-extrabold">
+                                {user?.username?.[0]?.toUpperCase() || "U"}
+                            </AvatarFallback>
+                        </Avatar>
+                        <span className="text-lg lg:hidden">Profile</span>
+                    </div>
                 </DropdownMenuTrigger>
+
                 <DropdownMenuContent side="right" className="w-56">
                     <DropdownMenuLabel>
                         Logged in as {user?.username}
@@ -97,7 +128,9 @@ function ShoppingHeader() {
     console.log(user);
 
     return (
-        <header className="sticky top-0 z-40 w-full border-b bg-background">
+        <header className="fixed top-0 z-40 w-full border-b text-white
+         bg-gradient-to-r from-[#1f0d00] via-[#2c1500] to-[#3e1900]
+         md:sticky   ">
             <div className="flex h-16 items-center justify-between px-4 md:px-6 ">
                 <Link to="/shop/home" className="flex gap-2 items-center ">
                     <HousePlug className="w-6 h-6" />
@@ -109,13 +142,17 @@ function ShoppingHeader() {
                             variant="outline"
                             size="icon"
                             className="lg:hidden">
-                            <Menu />
+                            <Menu className="text-black"
+                             />
                             <span className="sr-only">Toggle header menu</span>
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="w-full max-w-xs p-4 ">
                         <SheetTitle>Title Panel</SheetTitle>
-
+                        <SheetDescription>
+                            Use this panel to navigate between categories like
+                            Men, Women, Kids, and more.
+                        </SheetDescription>
                         <MenuItems />
                         <HeaderRightContent />
                     </SheetContent>

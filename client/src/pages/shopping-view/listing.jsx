@@ -21,6 +21,8 @@ import {
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { toast } from "sonner";
 
 function createSearchParamsHelper(filterParams) {
     const queryParams = [];
@@ -40,6 +42,7 @@ function ShoppingListing() {
         (state) => state.shoppingProducts,
         shallowEqual
     );
+    const { user } = useSelector((state) => state.auth);
     const [filters, setFilters] = useState({});
     const [sort, setSort] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -72,8 +75,23 @@ function ShoppingListing() {
     }
 
     function handleGetProductDetails(getCurrentProductId) {
-        console.log(getCurrentProductId);
         dispatch(fetchProductDetails({ id: getCurrentProductId }));
+    }
+
+    function handleAddToCart(getProductId) {
+        console.log(getProductId);
+        dispatch(
+            addToCart({
+                userId: user?.id,
+                productId: getProductId,
+                quantity: 1,
+            })
+        ).then((data) => {
+            if (data?.payload?.success) {
+                dispatch(fetchCartItems(user?.id));
+                toast.success("Product added to cart");
+            }
+        });
     }
 
     useEffect(() => {
@@ -109,10 +127,8 @@ function ShoppingListing() {
         if (productsDetails !== null) setOpenDetailsDialog(true);
     }, [productsDetails]);
 
-    console.log(productsDetails, "productsDetails");
-
-    return (
-        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-1 md:p-6">
+    return (  
+        <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-6 p-1 md:p-6 bg-[#F3F2E5] ">
             <ProductFilter filters={filters} handleFilter={handleFilter} />
             <div className="bg-background w-full rounded-lg shadow-sm">
                 <div className="p-4 border-b flex items-center justify-between ">
@@ -149,7 +165,7 @@ function ShoppingListing() {
                         </DropdownMenu>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-2 lg:p-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-2  lg:p-4">
                     {products && products.length > 0
                         ? products.map((productItem) => (
                               <ShoppingProductTile
@@ -158,14 +174,18 @@ function ShoppingListing() {
                                   handleGetProductDetails={
                                       handleGetProductDetails
                                   }
+                                  handleAddToCart={handleAddToCart}
                               />
                           ))
                         : "No Products Available "}
                 </div>
             </div>
-            <ProductDetailsDialog open={openDetailsDialog}
-            setOpen={setOpenDetailsDialog}
-            productsDetails={productsDetails} />
+            <ProductDetailsDialog
+                open={openDetailsDialog}
+                setOpen={setOpenDetailsDialog}
+                productsDetails={productsDetails}
+                handleAddToCart={handleAddToCart}
+            />
         </div>
     );
 }

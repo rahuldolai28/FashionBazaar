@@ -21,11 +21,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useLocation } from "react-router-dom";
+
 function App() {
     const { user, isAuthenticated, isLoading } = useSelector(
         (state) => state.auth
     );
     const dispatch = useDispatch();
+    const location = useLocation();
 
     useEffect(() => {
         dispatch(checkAuth());
@@ -36,9 +39,13 @@ function App() {
     return (
         <div className="flex flex-col overflow-hidden bg-white text-black">
             {/* {common components} */}
-            <header className="bg-gray-800 text-white p-4">
-                <h1 className="text-2xl font-bold">FashionBazaar</h1>
-            </header>
+            {!location.pathname.startsWith("/shop") && (
+                <header className="bg-gray-800 text-white p-4
+                bg-gradient-to-r from-[#1f0d00] via-[#2c1500] to-[#3e1900]">
+                    <h1 className="text-2xl font-bold">FashionBazaar</h1>
+                </header>
+            )}
+
             <Routes>
                 {/* Auth routes */}
                 <Route
@@ -82,7 +89,7 @@ function App() {
                             <ShoppingLayout />
                         </CheckAuth>
                     }>
-                    <Route path="home" element={<ShoppingListing />} />
+                    <Route path="home" element={<ShoppingHome />} />
                     <Route path="checkout" element={<ShoppingCheckout />} />
                     <Route path="listing" element={<ShoppingListing />} />
                     <Route path="account" element={<ShoppingAccount />} />

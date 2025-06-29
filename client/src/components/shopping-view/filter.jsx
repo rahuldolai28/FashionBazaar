@@ -21,6 +21,7 @@ function ProductFilter({ filters, handleFilter }) {
                                         key={option.id || option.label}
                                         className="flex items-center gap-2 font-medium ">
                                         <Checkbox
+                                            className="bg-[#fffefd]"
                                             checked={
                                                 !!(
                                                     filters &&

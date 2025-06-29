@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 5000;
 const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
 const shopProductsRouter = require("./routes/shop/products-routes");
+const cartRouter = require("./routes/shop/cart-routes");
 require("dotenv").config();
 
 mongoose
@@ -19,6 +20,7 @@ app.use(
     cors({
         origin: [
             "http://localhost:5173",
+            "http://localhost:5174",
             "https://fashionbazaar-client.vercel.app",
             "https://fashion-bazaar.vercel.app",
         ],
@@ -40,6 +42,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductsRouter);
+app.use("/api/shop/cart", cartRouter);
 
 //api/auth/register - authRouter
 //api/auth/login - loginRouter
