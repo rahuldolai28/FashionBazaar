@@ -8,6 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -26,7 +27,7 @@ function ProductDetailsDialog({
 
     function handleDialogClose() {
         setOpen(false);
-        dispatch(setProductDetails()); 
+        dispatch(setProductDetails());
     }
 
     return (
@@ -38,7 +39,7 @@ function ProductDetailsDialog({
                 products details description
             </DialogDescription>
             <DialogContent
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[300px_1fr]  gap-8 sm:p-12 max-w-[90vw]
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[300px_1fr] gap-4 lg:gap-8 sm:p-12 max-w-[90vw]
                   sm:max-w-[80vw] lg:max-w-[70vw] max-h-[98vh] lg:max-h-[85vh]  overflow-y-auto md:overflow-y-hidden ">
                 <div className="relative overflow-hidden rounded-lg">
                     <img
@@ -58,7 +59,7 @@ function ProductDetailsDialog({
                         {/*  justify-between  */}
                         {productsDetails?.salePrice > 0 ? (
                             <p className="text-2xl md:text-3xl font-bold ">
-                                ₹{productsDetails?.salePrice}
+                                ₹{productsDetails?.salePrice.toLocaleString() }
                             </p>
                         ) : null}
                         <p
@@ -67,7 +68,7 @@ function ProductDetailsDialog({
                                     ? "text-muted-foreground text-xl md:text-2xl line-through"
                                     : "text-primary text-2xl md:text-3xl font-bold "
                             } `}>
-                            ₹{productsDetails?.price}{" "}
+                            ₹{productsDetails?.price.toLocaleString()}
                         </p>
                     </div>
 
@@ -244,6 +245,14 @@ function ProductDetailsDialog({
                             <Input placeholder="Write a review..." />
                             <Button>Submit</Button>
                         </div>
+
+                        <DialogClose asChild>
+                            <Button
+                                variant=""
+                                className="w-full my-3 bg-amber-800 ">
+                                Go Back
+                            </Button>
+                        </DialogClose>
                     </div>
                 </div>
             </DialogContent>
