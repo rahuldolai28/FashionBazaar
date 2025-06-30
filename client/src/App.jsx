@@ -79,6 +79,8 @@ function App() {
                     <Route path="*" element={<div>Page Not Found</div>} />
                 </Route>
                 {/* shopping routes */}
+                <Route path="/" element={<Navigate to="/shop/home" />} />
+
                 <Route
                     path="shop"
                     element={
@@ -89,12 +91,13 @@ function App() {
                             <ShoppingLayout />
                         </CheckAuth>
                     }>
-                    <Route path="home" element={<ShoppingHome />} />
+                    {/* <Route path="home" element={<ShoppingHome />} /> */}
                     <Route path="checkout" element={<ShoppingCheckout />} />
                     <Route path="listing" element={<ShoppingListing />} />
                     <Route path="account" element={<ShoppingAccount />} />
                     <Route path="*" element={<NotFound />} />
                 </Route>
+                
                 <Route path="/unauth-page" element={<UnauthPage />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
