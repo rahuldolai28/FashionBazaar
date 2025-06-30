@@ -79,7 +79,7 @@ function App() {
                     <Route path="*" element={<div>Page Not Found</div>} />
                 </Route>
                 {/* shopping routes */}
-                <Route path="/" element={<Navigate to="/shop/home" />} />
+                {/* <Route path="/" element={<Navigate to="/shop/home" />} /> */}
 
                 <Route
                     path="shop"
@@ -91,7 +91,7 @@ function App() {
                             <ShoppingLayout />
                         </CheckAuth>
                     }>
-                    {/* <Route path="home" element={<ShoppingHome />} /> */}
+                    <Route path="home" element={<ShoppingHome />} />
                     <Route path="checkout" element={<ShoppingCheckout />} />
                     <Route path="listing" element={<ShoppingListing />} />
                     <Route path="account" element={<ShoppingAccount />} />
