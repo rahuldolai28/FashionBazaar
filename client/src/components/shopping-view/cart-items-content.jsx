@@ -11,15 +11,22 @@ function UserCartItemsContent({ cartItem }) {
     const dispatch = useDispatch();
 
     function handleCartItemDelete(getCartItem) {
+        const deleteingToast = toast.loading("Cart items deleting...");
         dispatch(
             deleteCartItem({
                 userId: user?.id,
                 productId: getCartItem?.productId,
             })
-        );
+        ).then((data) => {
+            if (data?.payload?.success) {
+                toast.dismiss(deleteingToast);
+                toast.success("Cart items deleted successfully");
+            }
+        });
     }
 
     function handleUpdateQuantity(cartItem, type) {
+        const updatingToast = toast.loading("Cart items updating...");
         dispatch(
             updateCartItem({
                 userId: user?.id,
@@ -31,6 +38,7 @@ function UserCartItemsContent({ cartItem }) {
             })
         ).then((data) => {
             if (data?.payload?.success) {
+                toast.dismiss(updatingToast);
                 toast.success("Cart items updated successfully");
             }
         });

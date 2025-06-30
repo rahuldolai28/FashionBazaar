@@ -79,7 +79,7 @@ function ShoppingListing() {
     }
 
     function handleAddToCart(getProductId) {
-        console.log(getProductId);
+        const addingToast = toast.loading("Cart items adding...");
         dispatch(
             addToCart({
                 userId: user?.id,
@@ -89,6 +89,7 @@ function ShoppingListing() {
         ).then((data) => {
             if (data?.payload?.success) {
                 dispatch(fetchCartItems(user?.id));
+                toast.dismiss(addingToast);
                 toast.success("Product added to cart");
             }
         });
