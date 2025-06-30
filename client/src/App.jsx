@@ -17,6 +17,9 @@ import ShoppingCheckout from "./pages/shopping-view/checkout";
 import ShoppingAccount from "./pages/shopping-view/account";
 import CheckAuth from "./components/common/check-auth";
 import UnauthPage from "./pages/unauth-page";
+
+// import Footer from "./components/public/footer";
+
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -101,6 +104,7 @@ function App() {
                 <Route path="/unauth-page" element={<UnauthPage />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
+            {/* <Footer/> */}
         </div>
     );
 }
