@@ -9,6 +9,7 @@ const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
 const shopProductsRouter = require("./routes/shop/products-routes");
 const cartRouter = require("./routes/shop/cart-routes");
+const bannerRouter = require("./routes/common/banner-routes")
 require("dotenv").config();
 
 mongoose
@@ -43,6 +44,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", cartRouter);
+
+app.use("/api/common/banner", bannerRouter);
 
 //api/auth/register - authRouter
 //api/auth/login - loginRouter

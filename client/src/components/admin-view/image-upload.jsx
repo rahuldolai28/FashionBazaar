@@ -15,6 +15,7 @@ function ProductImageUpload({
     setImageLoadingState,
     imageLoadingState,
     isEditMode,
+    isCustomStyling = false,
 }) {
     const inputRef = useRef(null);
 
@@ -23,7 +24,6 @@ function ProductImageUpload({
         if (selectedFile) {
             setImageFile(selectedFile);
         }
-        
     }
     function handleDragOver(event) {
         event.preventDefault();
@@ -41,19 +41,27 @@ function ProductImageUpload({
             inputRef.current.value = ""; // Clear the file input
         }
     }
-
     async function uploadImageToServer() {
-        setImageLoadingState(true);
-        const data = new FormData();
-        data.append("my_file", imageFile);
-        const response = await api.post(
-            "$/admin/products/upload-image",
-            data
-        );
-        console.log("Image upload response:", response);
-        if (response?.data?.success) {
+        try {
+            setImageLoadingState(true);
+
+            const formData = new FormData();
+            formData.append("my_file", imageFile);
+
+            const { data } = await api.post(
+                "/admin/products/upload-image",
+                formData
+            );
+            console.log("Image upload response:", data);
+
+            if (data?.success) {
+                setUploadedImageUrl(data.result.secure_url);
+            }
+        } catch (error) {
+            console.error("Image upload failed:", error);
+            // Optionally show a toast or error message here
+        } finally {
             setImageLoadingState(false);
-            setUploadedImageUrl(response.data.result.secure_url);
         }
     }
 
@@ -62,7 +70,12 @@ function ProductImageUpload({
     }, [imageFile]);
 
     return (
-        <div className="w-full max-w-md mx-auto ">
+        <div
+            className={` ${
+                isCustomStyling
+                    ? "mx-auto w-[90%] "
+                    : "max-w-md mx-auto w-full "
+            } `}>
             <Label className="text-lg font-semibold mb-2 ml-4 italic block">
                 Upload Image
             </Label>
