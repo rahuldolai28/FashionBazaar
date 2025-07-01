@@ -18,6 +18,7 @@ function ProductImageUpload({
     isCustomStyling = false,
 }) {
     const inputRef = useRef(null);
+    
 
     function handleImageFileChange(event) {
         const selectedFile = event.target.files[0];
