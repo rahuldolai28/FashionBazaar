@@ -128,7 +128,7 @@ function ShoppingHeader() {
     console.log(user);
 
     return (
-        <header className="fixed top-0 z-40 w-full border-b text-white
+        <header className=" top-0 z-40 w-full border-b text-white
          bg-gradient-to-r from-[#1f0d00] via-[#2c1500] to-[#3e1900]
          md:sticky   ">
             <div className="flex h-16 items-center justify-between px-4 md:px-6 ">

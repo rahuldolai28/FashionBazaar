@@ -109,7 +109,7 @@ const authSlice = createSlice({
             })
             .addCase(registerUser.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.isAuthenticated = false; // in video it is false
+                state.isAuthenticated = true; // in video it is false
                 state.user = action.payload; // in video it is action.payload
             })
             .addCase(registerUser.rejected, (state) => {
