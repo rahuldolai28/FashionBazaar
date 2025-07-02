@@ -15,11 +15,7 @@
 // });
 
 
-// // cloudinary.config({
-// //     cloud_name: 'dpsub2vjz',
-// //     api_key: '899415186547952',
-// //     api_secret: '5EplP-_FRSVHRlujfdH-xz7hyws',
-// //     });
+
 
 // const storage = multer.memoryStorage();
 
@@ -38,11 +34,22 @@ const multer = require("multer");
 const streamifier = require("streamifier");
 
 require("dotenv").config();
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
+
+// cloudinary.config({
+//     cloud_name: 'dpsub2vjz',
+//     api_key: '899415186547952',
+//     api_secret: '5EplP-_FRSVHRlujfdH-xz7hyws',
+//     });
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME?.trim(),
+  api_key: process.env.CLOUDINARY_API_KEY?.trim(),
+  api_secret: process.env.CLOUDINARY_API_SECRET?.trim(),
 });
 
 const storage = multer.memoryStorage();
